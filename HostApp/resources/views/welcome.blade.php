@@ -4,38 +4,36 @@
 <style>
     body {
         margin: 0;
-        overflow: hidden;
         font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #fcece3, #ffffff); /* Subtle gradient */
+        background: linear-gradient(135deg, #fcece3, #ffffff);
     }
 
     .hero-section {
         position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         height: 100vh;
-        z-index: 1;
-        text-align: center;
+        background-image: url('{{ asset('images/background.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        padding: 40px;
     }
 
-    .hero-title {
-        font-size: 3rem;
+    .brand-title {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        font-size: 2rem;
+        font-weight: bold;
         color: #ffffff;
-        margin-bottom: 15px;
-        z-index: 2;
-    }
-
-    .hero-text {
-        font-size: 1.2rem;
-        color: #ffffff;
-        margin-bottom: 30px;
-        z-index: 2;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        z-index: 10;
     }
 
     .destination-button {
-        padding: 12px 25px;
+        position: absolute;
+        top: 60%; /* Adjust to slightly below the center */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px 30px;
         font-size: 18px;
         color: #91766e;
         background-color: #ffffff;
@@ -44,51 +42,68 @@
         cursor: pointer;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
-        z-index: 2;
     }
 
     .destination-button:hover {
         background-color: #b7a7a9;
     }
 
-    .waves-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
+    .info-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        padding: 40px;
+        background-color: #ffffff;
+        box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
     }
 
-    canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
+    .info-tab {
+        text-align: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: linear-gradient(135deg, #fefefe, #f8f8f8);
     }
 
-    .hero-image {
-    position: absolute;
-    z-index: -3;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 900px;
-    width: 90%;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
+    .info-tab:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-number {
+        font-size: 2rem;
+        color: #91766e;
+    }
+
+    .info-title {
+        font-size: 1rem;
+        color: #555;
+        margin-top: 10px;
+    }
 </style>
 
-<div class="waves-container">
-    <canvas id="waves"></canvas>
+<div class="hero-section">
+    <div class="brand-title">Nomadia</div>
+    <button class="destination-button" onclick="window.location.href='{{ route('destinations') }}'">Explore Destinations</button>
 </div>
 
-<div class="hero-section">
-    <h1 class="hero-title">Welcome to Nomadia</h1>
-    <p class="hero-text">Your journey begins here. Explore breathtaking destinations.</p>
-    <button class="destination-button" onclick="window.location.href='{{ route('destinations') }}'">Explore Destinations</button>
-
-    <!-- Picture in front of waves -->
-    <img src="{{ asset('images/background.jpg') }}" alt="Hero Image" class="hero-image">
+<div class="info-tabs">
+    <div class="info-tab">
+        <span class="info-number">25K+</span>
+        <p class="info-title">Happy Clients</p>
+    </div>
+    <div class="info-tab">
+        <span class="info-number">560+</span>
+        <p class="info-title">Completed Projects</p>
+    </div>
+    <div class="info-tab">
+        <span class="info-number">100K+</span>
+        <p class="info-title">Property Sales</p>
+    </div>
+    <div class="info-tab">
+        <span class="info-number">15+</span>
+        <p class="info-title">Years Experience</p>
+    </div>
 </div>
 @endsection

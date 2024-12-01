@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -53,6 +55,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
+
+//desitnations routes
+Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations');
+Route::get('/destinations/{id}/reserved-dates', [DestinationController::class, 'getReservedDates']);
+Route::post('/destinations/{id}/reserve', [ReservationController::class, 'store'])->name('reservations.store');
+
+Route::get('/search', [DestinationController::class, 'search'])->name('search');
+Route::get('/map-search', [DestinationController::class, 'mapSearch'])->name('map.search');
+
 
 
 // Auth routes (registration, login, etc.)

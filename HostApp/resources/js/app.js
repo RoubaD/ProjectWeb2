@@ -6,6 +6,12 @@ Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('waves');
+
+    if (!canvas) {
+        console.error('Canvas element with ID "waves" not found.');
+        return;
+    }
+
     const ctx = canvas.getContext('2d');
 
     let waves = [];
