@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($request->password), // Regular registration
         ]);
 
         event(new Registered($user));
@@ -48,6 +48,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect()->route('welcome');
-
     }
+
 }

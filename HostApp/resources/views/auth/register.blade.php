@@ -84,10 +84,44 @@
         .submit-button:hover {
             opacity: 0.9;
         }
+
+        .google-login-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 12px;
+            background: #ffffff;
+            color: #91766e;
+            border: 1px solid #91766e;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .google-login-button:hover {
+            background: #91766e;
+            color: #ffffff;
+        }
+
+        .google-login-button img {
+            height: 20px;
+            margin-right: 10px;
+        }
     </style>
 
     <div class="form-container">
         <h1 class="form-title">Register</h1>
+
+        @if (session('error'))
+            <div style="color: red; font-size: 0.9rem; text-align: center; margin-bottom: 15px;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
@@ -142,5 +176,12 @@
                 <button type="submit" class="submit-button">Register</button>
             </div>
         </form>
+
+        <!-- Google Login Button -->
+        <a href="{{ route('login.google') }}" class="google-login-button">
+            <img src="\images\GoogleLogo.svg" alt="Google Icon">
+            Continue with Google
+        </a>
     </div>
 </x-guest-layout>
+        
