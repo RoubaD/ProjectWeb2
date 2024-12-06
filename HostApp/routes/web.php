@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -63,6 +64,8 @@ Route::post('/destinations/{id}/reserve', [ReservationController::class, 'store'
 
 Route::get('/search', [DestinationController::class, 'search'])->name('search');
 Route::get('/map-search', [DestinationController::class, 'mapSearch'])->name('map.search');
+
+Route::get('/detailedSearch', [SearchController::class, 'detailedSearch'])->name('detailedSearch');
 
 
 

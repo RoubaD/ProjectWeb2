@@ -15,7 +15,7 @@ class DestinationController extends Controller
             $query->where('name', 'like', "%$search%")
                   ->orWhere('landmark', 'like', "%$search%")
                   ->orWhere('property_type', 'like', "%$search%");
-        })->get();
+        })->take(6)->get();
     
         return view('destinations.index', compact('destinations'));
     }
@@ -61,6 +61,8 @@ class DestinationController extends Controller
 
         return view('destinations.map_search', compact('destinations'));
     }
+
+    
 
 
 
