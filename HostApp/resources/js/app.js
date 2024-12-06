@@ -1,83 +1,107 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
+import $ from "jquery";
+import "select2";
+import { gsap } from "gsap";
 
 window.Alpine = Alpine;
 Alpine.start();
 
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('waves');
+$(document).ready(function () {
+    // Initialize Select2 for dropdowns
+    $("#amenities").select2({
+        placeholder: "Select amenities",
+        allowClear: true,
+    });
+});
 
-    if (!canvas) {
-        console.error('Canvas element with ID "waves" not found.');
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form.filter-form");
+    const resultsContainer = document.querySelector(".property-list");
+
+    if (!form || !resultsContainer) {
+        console.error("Form or results container not found.");
         return;
     }
 
-    const ctx = canvas.getContext('2d');
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent form submission
 
-    let waves = [];
-    const colors = [
-        'rgba(145, 118, 110, 0.2)', // Subtle light color
-        'rgba(183, 167, 169, 0.3)', // Gradient-like mid tone
-        'rgba(252, 236, 227, 0.5)'  // Soft highlight
-    ];
+        // Collect form data
+        const formData = new FormData(form);
+        const queryString = new URLSearchParams(formData).toString();
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
+        // Perform AJAX call
+        fetch(`/detailedSearch?${queryString}`, {
+            method: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // Render the search results dynamically
+                renderResults(data.destinations);
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+                // Clear inputs **only if search completes successfully**
+                clearForm();
+            })
+            .catch((error) => console.error("Error fetching search results:", error));
+    });
 
-    class Wave {
-        constructor(color, speed, amplitude, wavelength, offset) {
-            this.color = color;
-            this.speed = speed;
-            this.amplitude = amplitude;
-            this.wavelength = wavelength;
-            this.offset = offset;
-            this.angle = 0;
+    // Function to render search results dynamically
+    function renderResults(destinations) {
+        resultsContainer.innerHTML = ""; // Clear old results
+
+        if (destinations.length > 0) {
+            destinations.forEach((destination) => {
+                const propertyCard = `
+                    <div class="bg-white rounded-lg shadow-md property-card">
+                        <img src="${destination.image}" alt="${destination.name}" class="w-full h-64 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold text-[#91766e]">${destination.name}</h3>
+                            <p class="text-sm text-gray-600"><strong>Price:</strong> $${Number(destination.price).toFixed(2)}</p>
+                            <p class="text-sm text-gray-600"><strong>Type:</strong> ${destination.property_type}</p>
+                            <p class="text-sm text-gray-600"><strong>Capacity:</strong> ${destination.guest_capacity} guests</p>
+                            <p class="text-sm text-gray-600"><strong>Amenities:</strong> ${
+                                Array.isArray(destination.amenities)
+                                    ? destination.amenities.join(", ")
+                                    : "Not specified"
+                            }</p>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.insertAdjacentHTML("beforeend", propertyCard);
+            });
+
+            // Animate new results
+            gsap.from(".property-card", {
+                opacity: 0,
+                scale: 0.9,
+                duration: 1,
+                stagger: 0.2,
+            });
+        } else {
+            resultsContainer.innerHTML = `<p class="col-span-full text-center text-[#91766e]">No destinations match your criteria.</p>`;
         }
+    }
 
-        draw() {
-            ctx.beginPath();
-            ctx.moveTo(0, canvas.height / 1.8); // Adjust height for subtlety
-
-            for (let x = 0; x < canvas.width; x++) {
-                const y =
-                    Math.sin((x / this.wavelength + this.angle) * Math.PI * 2) *
-                        this.amplitude +
-                    canvas.height / 1.8;
-                ctx.lineTo(x, y + this.offset);
-            }
-
-            ctx.lineTo(canvas.width, canvas.height);
-            ctx.lineTo(0, canvas.height);
-            ctx.closePath();
-            ctx.fillStyle = this.color;
-            ctx.fill();
-        }
-
-        update() {
-            this.angle += this.speed;
-            this.draw();
+    // Function to clear form inputs
+    function clearForm() {
+        form.reset();
+        if (window.$) {
+            $("#amenities").val(null).trigger("change");
         }
     }
+});
 
-    function initWaves() {
-        waves = [
-            new Wave(colors[0], 0.005, 20, 300, -20), // Slower and smaller
-            new Wave(colors[1], 0.003, 15, 400, 10),
-            new Wave(colors[2], 0.002, 10, 500, 30)
-        ];
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        waves.forEach((wave) => wave.update());
-        requestAnimationFrame(animate);
-    }
-
-    initWaves();
-    animate();
+// GSAP Animations
+document.addEventListener("DOMContentLoaded", () => {
+    gsap.from(".search-container", { opacity: 0, y: -50, duration: 1 });
+    gsap.from(".property-card", {
+        opacity: 0,
+        scale: 0.9,
+        duration: 1,
+        stagger: 0.2,
+    });
 });
