@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\PropertyDetailsController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,6 +65,8 @@ Route::post('/destinations/{id}/reserve', [ReservationController::class, 'store'
 
 Route::get('/search', [DestinationController::class, 'search'])->name('search');
 Route::get('/map-search', [DestinationController::class, 'mapSearch'])->name('map.search');
+
+Route::get('/detailedSearch', [SearchController::class, 'detailedSearch'])->name('detailedSearch');
 Route::get('/destinations/{id}', [PropertyDetailsController::class, 'show'])->name('destinations.show');
 Route::get('/destinations/{id}/reserved-dates', [PropertyDetailsController::class, 'getReservedDates'])->name('destinations.reservedDates');
 
