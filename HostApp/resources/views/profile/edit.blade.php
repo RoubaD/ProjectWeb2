@@ -39,10 +39,17 @@
     .profile-edit-container input {
         width: 100%;
         padding: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         border: 1px solid #b7a7a9;
         border-radius: 5px;
         font-size: 14px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 12px;
+        text-align: left;
+        margin-bottom: 15px;
     }
 
     .button-group {
@@ -80,47 +87,6 @@
         background-color: #91766e;
         color: #ffffff;
     }
-
-    /* Custom SweetAlert2 styles */
-    .swal2-popup {
-        background-color: rgba(255, 247, 242, 0.9) !important; /* Light beige */
-        color: #91766e !important; /* Muted pink text */
-        border: 1px solid #b7a7a9 !important; /* Lighter muted border */
-        border-radius: 15px !important; /* Rounded corners */
-        font-family: 'Poppins', sans-serif !important;
-    }
-
-    .swal2-title {
-        color: #91766e !important;
-        font-size: 20px !important;
-    }
-
-    .swal2-content {
-        font-size: 16px !important;
-        color: #555 !important; /* Neutral text for the message */
-    }
-
-    .swal2-confirm {
-        background-color: #91766e !important; /* Muted pink button */
-        color: #ffffff !important; /* White text */
-        border: none !important;
-        border-radius: 5px !important;
-        font-family: 'Poppins', sans-serif !important;
-        font-size: 14px !important;
-    }
-
-    .swal2-cancel {
-        background-color: #fcece3 !important; /* Beige button */
-        color: #91766e !important; /* Muted pink text */
-        border: 1px solid #91766e !important; /* Muted pink border */
-        border-radius: 5px !important;
-        font-family: 'Poppins', sans-serif !important;
-        font-size: 14px !important;
-    }
-
-    .swal2-actions button {
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
-    }
 </style>
 
 <div class="profile-edit-container">
@@ -133,18 +99,27 @@
         <div>
             <label for="name">Name</label>
             <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+            @error('name')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Email -->
         <div>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+            @error('email')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Phone Number -->
         <div>
             <label for="phone">Phone Number</label>
             <input type="tel" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" required>
+            @error('phone')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Buttons -->
@@ -163,8 +138,6 @@
         @csrf
         @method('DELETE')
     </form>
-
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -195,32 +168,36 @@
 
         // Save Changes Confirmation
         saveChangesButton.addEventListener('click', function () {
+            updateForm.submit();
+        });
+
+        // Validation Errors
+        @if ($errors->any())
+            Swal.fire({
+                title: 'Validation Errors',
+                html: `
+                    <ul style="text-align: left;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                `,
+                icon: 'error',
+                confirmButtonColor: '#91766e',
+                confirmButtonText: 'OK',
+            });
+        @endif
+
+        // Success Feedback
+        @if (session('success'))
             Swal.fire({
                 title: 'Success!',
-                text: 'Your profile has been updated successfully.',
+                text: "{{ session('success') }}",
                 icon: 'success',
                 confirmButtonColor: '#91766e',
                 confirmButtonText: 'OK',
-            }).then(() => {
-                updateForm.submit();
             });
-        });
-
-        // Delete Success Feedback
-        @if (session('success'))
-        Swal.fire({
-            title: 'Success!',
-            text: "{{ session('success') }}",
-            icon: 'success',
-            confirmButtonColor: '#91766e',
-            confirmButtonText: 'OK',
-        });
         @endif
-
-        @if (session('error'))
-            <div>{{ session('error') }}</div>
-        @endif
-
     });
 </script>
 @endsection

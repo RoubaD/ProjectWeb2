@@ -183,7 +183,7 @@ body {
     <a href="{{ route('detailedSearch') }}" class="filter-button" title="Filter Options"></a>
 
     <!-- Search Bar -->
-    <form method="GET" action="{{ route('detailedSearch') }}" class="search-bar-container">
+    <form method="GET" action="{{ route('destinations') }}" class="search-bar-container">
         <input 
             type="text" 
             name="search" 
@@ -191,7 +191,9 @@ body {
             value="{{ request('search') }}" 
             class="search-bar"
         />
+        <button type="submit" style="display: none;">Search</button> <!-- Hidden button to enable form submission -->
     </form>
+
 
     <!-- Map Search Button -->
     <a href="{{ route('map.search') }}" class="map-search-button" title="Search on Map"></a>
@@ -211,7 +213,11 @@ body {
             <h3>{{ $destination->name }}</h3>
             <p><strong>Landmark:</strong> {{ $destination->landmark }}</p>
             <p><strong>Type:</strong> {{ $destination->property_type }}</p>
-            <p><strong>Amenities:</strong> {{ implode(', ', json_decode($destination->amenities, true)) }}</p>
+            <p><strong>Amenities:</strong>
+                {{ is_array($destination->amenities) 
+                    ? implode(', ', $destination->amenities) 
+                    : implode(', ', json_decode($destination->amenities, true) ?? []) }}
+            </p>
             <p><strong>Guest Capacity:</strong> {{ $destination->guest_capacity }}</p>
             <p class="price">$ {{ number_format($destination->price, 2) }}</p>
 

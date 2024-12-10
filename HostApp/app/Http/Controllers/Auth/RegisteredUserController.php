@@ -30,9 +30,9 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z]+$/'], // Alphabetical validation
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'max:20', 'regex:/^\d{6,}$/'], // At least 6 digits, no letters
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -49,5 +49,6 @@ class RegisteredUserController extends Controller
 
         return redirect()->route('welcome');
     }
+
 
 }

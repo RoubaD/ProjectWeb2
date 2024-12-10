@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
 
 //desitnations routes
 Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations');
+Route::get('/destinations/{id}', [PropertyDetailsController::class, 'show'])->name('destinations');
 Route::get('/destinations/{id}/reserved-dates', [DestinationController::class, 'getReservedDates']);
 Route::post('/destinations/{id}/reserve', [ReservationController::class, 'store'])->name('reservations.store');
 

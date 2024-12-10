@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
@@ -25,21 +24,25 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            // Ensure the name is strictly alphabetical (no numbers or special characters)
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z]+$/',
+            
+            // Ensure the email is unique, ignoring the current user's email
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'required|string|max:15', // Add validation for phone
+            
+            // Validate phone number to be at least 6 digits and no letters
+            'phone' => 'required|string|max:15|regex:/^\d{6,}$/',
         ]);
 
+        // Update user's profile information
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone, // Update the phone field
+            'phone' => $request->phone,
         ]);
 
         return redirect()->route('profile.edit')->with('success', 'Profile updated successfully.');
     }
-
-    
 
     /**
      * Delete the user's account.
@@ -60,6 +63,4 @@ class ProfileController extends Controller
     
         return redirect('/')->with('success', 'Account deleted successfully.');
     }
-    
-
 }

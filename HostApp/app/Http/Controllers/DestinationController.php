@@ -10,15 +10,24 @@ class DestinationController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-    
+
         $destinations = Destination::when($search, function ($query, $search) {
             $query->where('name', 'like', "%$search%")
-                  ->orWhere('landmark', 'like', "%$search%")
-                  ->orWhere('property_type', 'like', "%$search%");
+                ->orWhere('landmark', 'like', "%$search%")
+                ->orWhere('property_type', 'like', "%$search%");
         })->take(6)->get();
-    
-        return view('destinations.index', compact('destinations'));
+
+        // Ensure amenities are always decoded
+        foreach ($destinations as $destination) {
+            $destination->amenities = is_array($destination->amenities)
+                ? $destination->amenities
+                : json_decode($destination->amenities, true);
+        }
+
+        return view('destinations', compact('destinations', 'search'));
     }
+
+
     
 
     public function getReservedDates($id)
@@ -45,7 +54,7 @@ class DestinationController extends Controller
         }
 
         // Pass the search results to the view
-        return view('destinations.index', compact('destinations'));
+        return view('destinations', compact('destinations'));
     }
 
     public function mapSearch()
