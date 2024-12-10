@@ -30,6 +30,8 @@ class DestinationSeeder extends Seeder
             'guest_capacity' => 4,
             'image' => 'images/beach_apartment.jpg', // Add the image path
             'availability' => json_encode(['2024-12-15', '2024-12-18', '2024-12-25']),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

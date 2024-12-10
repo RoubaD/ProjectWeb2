@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -67,8 +67,10 @@
         }
 
         .logo-container img {
-            width: 70px; /* Adjustable width */
-            height: auto; /* Maintains aspect ratio */
+            width: 70px;
+            /* Adjustable width */
+            height: auto;
+            /* Maintains aspect ratio */
         }
 
         .user-section {
@@ -99,26 +101,33 @@
         .dropdown {
             position: relative;
             display: inline-block;
-            width: 150px; /* Set the width of the button and dropdown */
+            width: 150px;
+            /* Set the width of the button and dropdown */
         }
 
         /* Dropdown Button */
         .dropdown-button {
-            background: rgba(145, 118, 110, 0.2); /* Less solid background */
+            background: rgba(145, 118, 110, 0.2);
+            /* Less solid background */
             color: #91766e;
             border: 1px solid #91766e;
             border-radius: 5px;
             padding: 8px 10px;
             cursor: pointer;
-            font-size: 0.9rem; /* Smaller font size */
-            width: 100%; /* Same width as the dropdown menu */
-            text-align: left; /* Align text to the left for consistency */
+            font-size: 0.9rem;
+            /* Smaller font size */
+            width: 100%;
+            /* Same width as the dropdown menu */
+            text-align: left;
+            /* Align text to the left for consistency */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .dropdown-button:hover {
-            background-color: rgba(145, 118, 110, 0.4); /* Slightly darker on hover */
-            color: #fff; /* Text changes to white on hover */
+            background-color: rgba(145, 118, 110, 0.4);
+            /* Slightly darker on hover */
+            color: #fff;
+            /* Text changes to white on hover */
         }
 
         /* Dropdown Menu */
@@ -131,7 +140,8 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             overflow: hidden;
-            width: 100%; /* Matches the button width */
+            width: 100%;
+            /* Matches the button width */
             z-index: 1000;
         }
 
@@ -145,7 +155,8 @@
             padding: 10px;
             color: #91766e;
             text-decoration: none;
-            font-size: 0.9rem; /* Smaller font size */
+            font-size: 0.9rem;
+            /* Smaller font size */
             border: none;
             background: none;
             text-align: left;
@@ -183,7 +194,8 @@
 
         /* Content */
         main {
-            margin-top: 70px; /* Space for fixed dashboard */
+            margin-top: 70px;
+            /* Space for fixed dashboard */
         }
     </style>
 
@@ -192,6 +204,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body>
     <div id="app">
         <!-- Fixed Dashboard -->
@@ -241,5 +254,7 @@
     </div>
 
     @stack('scripts')
+
 </body>
+
 </html>

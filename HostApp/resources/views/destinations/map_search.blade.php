@@ -26,7 +26,10 @@
     function initMap() {
         // Initialize map centered on a default location
         map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 33.8938, lng: 35.5018 }, // Example coordinates (Beirut)
+            center: {
+                lat: 33.8938,
+                lng: 35.5018
+            }, // Example coordinates (Beirut)
             zoom: 10,
         });
 
@@ -36,9 +39,9 @@
         // Add markers for each villa
         destinations.forEach(destination => {
             const marker = new google.maps.Marker({
-                position: { 
-                    lat: parseFloat(destination.latitude), 
-                    lng: parseFloat(destination.longitude) 
+                position: {
+                    lat: parseFloat(destination.latitude),
+                    lng: parseFloat(destination.longitude)
                 },
                 map: map,
                 title: destination.name, // Tooltip for the marker
@@ -71,6 +74,5 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4dYsLxhDwxjH_pK5jkPm-KHGjZmRwFLY&callback=initMap"
     async
     defer
-    loading="lazy"
-></script>
+    loading="lazy"></script>
 @endsection

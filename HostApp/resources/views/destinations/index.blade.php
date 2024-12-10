@@ -59,9 +59,11 @@
         0% {
             box-shadow: 0 0 15px rgba(145, 118, 110, 0.6);
         }
+
         50% {
             box-shadow: 0 0 25px rgba(145, 118, 110, 0.3);
         }
+
         100% {
             box-shadow: 0 0 15px rgba(145, 118, 110, 0.6);
         }
@@ -170,13 +172,12 @@
 
 <div class="search-container">
     <form method="GET" action="{{ route('destinations') }}">
-        <input 
-            type="text" 
-            name="search" 
-            placeholder="Explore destinations..." 
-            value="{{ request('search') }}" 
-            class="search-bar"
-        />
+        <input
+            type="text"
+            name="search"
+            placeholder="Explore destinations..."
+            value="{{ request('search') }}"
+            class="search-bar" />
     </form>
     <!-- Map Search Button -->
     <a href="{{ route('map.search') }}" class="map-search-button" title="Search on Map">
@@ -188,25 +189,25 @@
 
 <div class="grid-container">
     @foreach ($destinations as $destination)
-        <div class="destination-card">
-            <!-- Destination Image -->
-            <img src="{{ asset($destination->image) }}" alt="{{ $destination->name }}">
+    <div class="destination-card">
+        <!-- Destination Image -->
+        <img src="{{ asset($destination->image) }}" alt="{{ $destination->name }}">
 
-            <!-- Destination Details -->
-            <div class="destination-details">
-                <h3>{{ $destination->name }}</h3>
-                <p><strong>Landmark:</strong> {{ $destination->landmark }}</p>
-                <p><strong>Type:</strong> {{ $destination->property_type }}</p>
-                <p><strong>Amenities:</strong> {{ implode(', ', json_decode($destination->amenities, true)) }}</p>
-                <p><strong>Guest Capacity:</strong> {{ $destination->guest_capacity }}</p>
-                <p class="price">$ {{ number_format($destination->price, 2) }}</p>
+        <!-- Destination Details -->
+        <div class="destination-details">
+            <h3>{{ $destination->name }}</h3>
+            <p><strong>Landmark:</strong> {{ $destination->landmark }}</p>
+            <p><strong>Type:</strong> {{ $destination->property_type }}</p>
+            <p><strong>Amenities:</strong> {{ implode(', ', json_decode($destination->amenities, true)) }}</p>
+            <p><strong>Guest Capacity:</strong> {{ $destination->guest_capacity }}</p>
+            <p class="price">$ {{ number_format($destination->price, 2) }}</p>
 
-                <!-- Button -->
-                <div class="button-container">
-                    <a href="#" class="view-more-button">View More</a>
-                </div>
+            <!-- Button -->
+            <div class="button-container">
+                <a href="{{ route('destinations.show', ['id' => $destination->id]) }}" class="view-more-button">View More</a>
             </div>
         </div>
+    </div>
     @endforeach
 </div>
 @endsection

@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\PropertyDetailsController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,7 +55,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
 });
 
 //desitnations routes
@@ -63,7 +64,12 @@ Route::post('/destinations/{id}/reserve', [ReservationController::class, 'store'
 
 Route::get('/search', [DestinationController::class, 'search'])->name('search');
 Route::get('/map-search', [DestinationController::class, 'mapSearch'])->name('map.search');
+Route::get('/destinations/{id}', [PropertyDetailsController::class, 'show'])->name('destinations.show');
+Route::get('/destinations/{id}/reserved-dates', [PropertyDetailsController::class, 'getReservedDates'])->name('destinations.reservedDates');
 
+Route::get('/api/check-auth', function () {
+    return response()->json(['authenticated' => Auth::check()]);
+});
 
 
 // Auth routes (registration, login, etc.)
