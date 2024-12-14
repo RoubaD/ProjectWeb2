@@ -10,6 +10,7 @@ use App\Http\Controllers\PropertyDetailsController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\WishlistController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -76,7 +77,11 @@ Route::get('/api/check-auth', function () {
 });
 //Reservation routes
 Route::get('/reservations', [ReservationController::class, 'getUserReservations'])->name('reservations.index')->middleware('auth');
-
+Route::middleware('auth')->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/{destination}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{destination}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+});
 
 // Auth routes (registration, login, etc.)
 //require __DIR__.'/auth.php';

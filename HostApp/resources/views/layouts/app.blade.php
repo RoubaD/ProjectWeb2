@@ -8,6 +8,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Styles -->
     <style>
@@ -216,6 +217,9 @@
                     <a href="{{ route('destinations') }}">Destinations</a>
                     <a href="{{ route('contact') }}">Contact Us</a>
                     <a href="{{ route('reservations.index') }}">My Reservations</a>
+                    <a href="{{ route('wishlist.index') }}">
+                        <i class="fa fa-heart"></i> Wishlist
+                    </a>
                 </div>
 
                 <!-- Logo in the Center -->
@@ -225,6 +229,7 @@
 
                 <!-- Right Section -->
                 <div class="user-section">
+
                     @auth
                         <div class="dropdown">
                             <button class="dropdown-button">
