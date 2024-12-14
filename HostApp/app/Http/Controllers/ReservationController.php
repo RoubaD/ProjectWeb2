@@ -3,10 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Destination;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
+    public function getUserReservations()
+    {
+        $userId = Auth::id();
+
+        $reservations = Reservation::where('client_id', $userId)->get();
+
+        return view('reservations.index', compact('reservations'));
+    }
     public function store(Request $request, $id)
     {
         $request->validate([

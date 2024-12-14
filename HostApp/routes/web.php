@@ -74,6 +74,8 @@ Route::get('/destinations/{id}/reserved-dates', [PropertyDetailsController::clas
 Route::get('/api/check-auth', function () {
     return response()->json(['authenticated' => Auth::check()]);
 });
+//Reservation routes
+Route::get('/reservations', [ReservationController::class, 'getUserReservations'])->middleware('auth');
 
 
 // Auth routes (registration, login, etc.)
