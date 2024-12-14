@@ -71,6 +71,18 @@ class DestinationController extends Controller
         return view('destinations.map_search', compact('destinations'));
     }
 
+    public function getDestinationById($id)
+{
+    $destination = Destination::findOrFail($id);
+
+    $destination->amenities = is_array($destination->amenities)
+        ? $destination->amenities
+        : json_decode($destination->amenities, true);
+
+    return $destination;
+}
+
+
     
 
 

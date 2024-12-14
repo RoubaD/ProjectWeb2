@@ -9,14 +9,19 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    public function getUserReservations()
-    {
-        $userId = Auth::id();
+    public function getUserReservations(DestinationController $destinationController)
+{
+    $userId = Auth::id();
 
-        $reservations = Reservation::where('client_id', $userId)->get();
+    $reservations = Reservation::where('client_id', $userId)->get();
 
-        return view('reservations.index', compact('reservations'));
+    foreach ($reservations as $reservation) {
+        $reservation->destinationDetails = $destinationController->getDestinationById($reservation->destination_id);
     }
+
+    return view('reservations.index', compact('reservations'));
+}
+
     public function store(Request $request, $id)
     {
         $request->validate([
