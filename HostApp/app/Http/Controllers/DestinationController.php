@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Wishlist;
 use App\Models\Destination;
 use Illuminate\Http\Request;
 
@@ -9,6 +9,7 @@ class DestinationController extends Controller
 {
     public function index(Request $request)
     {
+        $userId = auth()->id();
         $search = $request->query('search');
 
         $destinations = Destination::when($search, function ($query, $search) {
@@ -17,14 +18,14 @@ class DestinationController extends Controller
                 ->orWhere('property_type', 'like', "%$search%");
         })->take(6)->get();
 
-        // Ensure amenities are always decoded
+        
         foreach ($destinations as $destination) {
             $destination->amenities = is_array($destination->amenities)
                 ? $destination->amenities
                 : json_decode($destination->amenities, true);
         }
-
-        return view('destinations', compact('destinations', 'search'));
+        $wishlist = Wishlist::where('user_id', $userId)->pluck('destination_id')->toArray();
+        return view('destinations', compact('destinations', 'search','wishlist'));
     }
 
 

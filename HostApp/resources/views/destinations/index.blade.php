@@ -188,6 +188,19 @@
     .view-more-button:hover {
         background: #b7a7a9;
     }
+    .fa-heart {
+    transition: color 0.3s ease;
+}
+
+.fa-heart.text-danger {
+    color: red;
+}
+
+.fa-heart.text-secondary {
+    color: #ccc;
+}
+
+
 </style>
 
 <div class="hero-title">Explore Our Destinations</div>

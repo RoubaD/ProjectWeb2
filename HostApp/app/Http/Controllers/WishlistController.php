@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
-    // View the wishlist of the authenticated user
     public function index()
     {
         $userId = Auth::id();
@@ -42,5 +41,28 @@ class WishlistController extends Controller
             ->delete();
 
         return back()->with('success', 'Destination removed from your wishlist.');
+    }
+
+    public function toggle($id)
+    {
+        $userId = auth()->id();
+
+        // Check if destination is already in the wishlist
+        $wishlist = Wishlist::where('user_id', $userId)
+            ->where('destination_id', $id)
+            ->first();
+
+        if ($wishlist) {
+            // Remove from wishlist
+            $wishlist->delete();
+            return response()->json(['status' => 'removed']);
+        } else {
+            // Add to wishlist
+            Wishlist::create([
+                'user_id' => $userId,
+                'destination_id' => $id,
+            ]);
+            return response()->json(['status' => 'added']);
+        }
     }
 }

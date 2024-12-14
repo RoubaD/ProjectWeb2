@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <style>
     body {
         margin: 0;
@@ -188,6 +190,18 @@
     .view-more-button:hover {
         background: #b7a7a9;
     }
+
+    .fa-heart {
+        transition: color 0.3s ease;
+    }
+
+    .fa-heart.text-danger {
+        color: red;
+    }
+
+    .fa-heart.text-secondary {
+        color: #ccc;
+    }
 </style>
 
 <div class="hero-title">Explore Our Destinations</div>
@@ -230,18 +244,56 @@
                 <p><strong>Guest Capacity:</strong> {{ $destination->guest_capacity }}</p>
                 <p class="price">$ {{ number_format($destination->price, 2) }}</p>
 
-                <form action="{{ route('wishlist.store', $destination->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-danger">
-                        <i class="fa fa-heart"></i> Add to Wishlist
+                <div class="wishlist-icon-container">
+                    <button class="wishlist-toggle-button" data-destination-id="{{ $destination->id }}"
+                        style="background: none; border: none; cursor: pointer;">
+                        <i class="fa fa-heart {{ in_array($destination->id, $wishlist) ? 'text-danger' : 'text-secondary' }}"
+                            id="heart-icon-{{ $destination->id }}" style="font-size: 1.5rem;"></i>
+
                     </button>
-                </form>
+                </div>
                 <div class="button-container">
                     <a href="{{ route('destinations.show', ['id' => $destination->id]) }}" class="view-more-button">View
-                        Moreee</a>
+                        More</a>
                 </div>
             </div>
         </div>
     @endforeach
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const wishlistButtons = document.querySelectorAll('.wishlist-toggle-button');
+
+        wishlistButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const destinationId = button.getAttribute('data-destination-id');
+                const heartIcon = document.getElementById(`heart-icon-${destinationId}`);
+
+                fetch(`/wishlist/toggle/${destinationId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'added') {
+                            heartIcon.classList.remove('text-secondary');
+                            heartIcon.classList.add('text-danger');
+                        } else if (data.status === 'removed') {
+                            heartIcon.classList.remove('text-danger');
+                            heartIcon.classList.add('text-secondary');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating wishlist:', error);
+                    });
+            });
+        });
+    });
+
+</script>
+
 @endsection
