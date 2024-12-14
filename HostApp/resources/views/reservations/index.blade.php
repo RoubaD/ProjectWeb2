@@ -2,154 +2,136 @@
 
 @section('content')
 <style>
-body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #fcece3, #ffffff);
-    color: #91766e;
-}
-
-.hero-title {
-    font-size: 2.5rem;
-    text-align: center;
-    margin: 30px 0;
-    color: #91766e;
-}
-
-.grid-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-}
-
-.reservation-card {
-    flex: 0 1 calc(33.333% - 20px); /* Three cards per row with gap consideration */
-    max-width: 400px;
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-.reservation-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.reservation-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
-
-.reservation-details {
-    padding: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.reservation-details h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.reservation-details p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.price {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #91766e;
-    margin-top: auto; /* Pushes price to bottom of card */
-}
-
-.no-reservations {
-    text-align: center;
-    color: #91766e;
-    font-size: 1.2rem;
-    margin-top: 50px;
-}
-
-.amenities-list {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 10px;
-}
-
-.amenities-list li {
-    background-color: rgba(145, 118, 110, 0.1);
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-    .reservation-card {
-        flex: 0 1 calc(50% - 20px); /* Two cards per row */
+    :root {
+        --primary-color: #91766e;
+        --background-gradient: linear-gradient(135deg, #fcece3, #ffffff);
+        --card-background: #ffffff;
+        --soft-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        --hover-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
     }
+
+    body {
+        margin: 0;
+        font-family: 'Inter', 'Poppins', sans-serif;
+        background: var(--background-gradient);
+        color: var(--primary-color);
+        line-height: 1.6;
+    }
+
+    .reservations-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+
+    .hero-title {
+        font-size: 2.75rem;
+        text-align: center;
+        margin-bottom: 40px;
+        color: var(--primary-color);
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+
+    .category-title {
+        font-size: 1.75rem;
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid rgba(145, 118, 110, 0.15);
+        font-weight: 500;
+    }
+
+    .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); /* Increased width */
+    gap: 25px;
+    margin-bottom: 40px;
 }
 
-@media (max-width: 768px) {
-    .reservation-card {
-        flex: 0 1 100%; /* One card per row */
+    .no-reservations {
+        text-align: center;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+        background-color: rgba(145, 118, 110, 0.05);
+        padding: 25px;
+        border-radius: 12px;
+        font-weight: 300;
     }
-}
+
+    @media (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
-<div class="hero-title">Your Reservations</div>
+<div class="reservations-container">
+    <div class="hero-title">Your Reservations</div>
 
-@if($reservations->isEmpty())
-    <div class="no-reservations">
-        You have no reservations.
-    </div>
-@else
-    <div class="grid-container">
-        @foreach($reservations as $reservation)
-        <div class="reservation-card">
-            <!-- Reservation Image -->
-            <img src="{{ asset($reservation->destinationDetails->image) }}" alt="{{ $reservation->destinationDetails->name }}">
+    @php
+        $currentDate = now();
+    @endphp
 
-            <!-- Reservation Details -->
-            <div class="reservation-details">
-                <h3>{{ $reservation->destinationDetails->name }}</h3>
-                <p><strong>Reserved Date:</strong> {{ $reservation->reserved_date }}</p>
-                <p><strong>Landmark:</strong> {{ $reservation->destinationDetails->landmark }}</p>
-                <p><strong>Type:</strong> {{ $reservation->destinationDetails->property_type }}</p>
-                
-                @if(!empty($reservation->destinationDetails->amenities))
-                    <p><strong>Amenities:</strong></p>
-                    <ul class="amenities-list">
-                        @foreach(is_array($reservation->destinationDetails->amenities) 
-                                ? $reservation->destinationDetails->amenities 
-                                : json_decode($reservation->destinationDetails->amenities, true) as $amenity)
-                            <li>{{ $amenity }}</li>
-                        @endforeach
-                    </ul>
-                @endif
+    @php
+        $currentReservations = $reservations->filter(function ($reservation) use ($currentDate) {
+            return \Carbon\Carbon::parse($reservation->start_date)->lte($currentDate) &&
+                \Carbon\Carbon::parse($reservation->end_date)->gte($currentDate);
+        });
+    @endphp
 
-                <p><strong>Guest Capacity:</strong> {{ $reservation->destinationDetails->guest_capacity }} guests</p>
-                <p class="price">$ {{ number_format($reservation->destinationDetails->price, 2) }}</p>
-                
-                <p><strong>Location:</strong> 
-                    Lat: {{ $reservation->destinationDetails->latitude }}, 
-                    Long: {{ $reservation->destinationDetails->longitude }}
-                </p>
-            </div>
+    @php
+        $upcomingReservations = $reservations->filter(function ($reservation) use ($currentDate) {
+            return \Carbon\Carbon::parse($reservation->start_date)->gt($currentDate);
+        });
+    @endphp
+
+    @php
+        $pastReservations = $reservations->filter(function ($reservation) use ($currentDate) {
+            return \Carbon\Carbon::parse($reservation->end_date)->lt($currentDate);
+        });
+    @endphp
+
+    {{-- Current Reservations --}}
+    <h2 class="category-title">Current Reservations</h2>
+    @if($currentReservations->isEmpty())
+        <div class="no-reservations">
+            You have no current reservations.
         </div>
-        @endforeach
-    </div>
-@endif
+    @else
+        <div class="grid-container">
+            @foreach($currentReservations as $reservation)
+                @include('reservations.card', ['reservation' => $reservation])
+            @endforeach
+        </div>
+    @endif
+
+    {{-- Upcoming Reservations --}}
+    <h2 class="category-title">Upcoming Reservations</h2>
+    @if($upcomingReservations->isEmpty())
+        <div class="no-reservations">
+            You have no upcoming reservations.
+        </div>
+    @else
+        <div class="grid-container">
+            @foreach($upcomingReservations as $reservation)
+                @include('reservations.card', ['reservation' => $reservation])
+            @endforeach
+        </div>
+    @endif
+
+    {{-- Past Reservations --}}
+    <h2 class="category-title">Past Reservations</h2>
+    @if($pastReservations->isEmpty())
+        <div class="no-reservations">
+            You have no past reservations.
+        </div>
+    @else
+        <div class="grid-container">
+            @foreach($pastReservations as $reservation)
+                @include('reservations.card', ['reservation' => $reservation])
+            @endforeach
+        </div>
+    @endif
+</div>
 @endsection
