@@ -9,6 +9,8 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
+
 
     <!-- Styles -->
     <style>
@@ -63,12 +65,12 @@
         .logo-container {
             flex: 1;
             display: flex;
-            justify-content: center;
+            justify-content: end;
             align-items: center;
         }
 
         .logo-container img {
-            width: 70px;
+            width: 110px;
             /* Adjustable width */
             height: auto;
             /* Maintains aspect ratio */
@@ -109,18 +111,14 @@
         /* Dropdown Button */
         .dropdown-button {
             background: rgba(145, 118, 110, 0.2);
-            /* Less solid background */
             color: #91766e;
             border: 1px solid #91766e;
             border-radius: 5px;
             padding: 8px 10px;
             cursor: pointer;
             font-size: 0.9rem;
-            /* Smaller font size */
             width: 100%;
-            /* Same width as the dropdown menu */
-            text-align: left;
-            /* Align text to the left for consistency */
+            /* text-align: left; */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -193,11 +191,55 @@
             color: #ffffff;
         }
 
-        /* Content */
         main {
             margin-top: 70px;
-            /* Space for fixed dashboard */
         }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            left: -250px; 
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .drawer a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #91766e;
+            transition: background-color 0.3s;
+        }
+
+        .drawer a:hover {
+            background-color: #91766e;
+            color: #ffffff;
+        }
+
+        .close-drawer {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #91766e;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .drawer-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #91766e;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
     </style>
 
     @stack('styles')
@@ -208,30 +250,18 @@
 
 <body>
     <div id="app">
-        <!-- Fixed Dashboard -->
         <div class="dashboard-container">
             <div class="dashboard-inner">
-                <!-- Left Navigation Menu -->
-                <div class="nav-menu">
-                    <a href="{{ route('welcome') }}">Home</a>
-                    <a href="{{ route('destinations') }}">Destinations</a>
-                    <a href="{{ route('contact') }}">Contact Us</a>
-        @auth
-                    <a href="{{ route('reservations.index') }}">My Reservations</a>
-                    <a href="{{ route('wishlist.index') }}">
-            <i class="fa fa-heart"></i> Wishlist
-        </a>
-        @endauth
-                </div>
+                <button id="drawer-toggle" class="drawer-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
 
-                <!-- Logo in the Center -->
                 <div class="logo-container">
-                    <img src="{{ asset('images/Logo.svg') }}" alt="Logo">
+                    <a href="{{ route('welcome') }}">
+                        <img src="{{ asset('images/Logo.svg') }}" alt="Logo">
+                    </a>              
                 </div>
-
-                <!-- Right Section -->
                 <div class="user-section">
-
                     @auth
                         <div class="dropdown">
                             <button class="dropdown-button">
@@ -255,16 +285,43 @@
             </div>
         </div>
 
+        <!-- Drawer Menu -->
+        <div id="drawer" class="drawer">
+            <button id="close-drawer" class="close-drawer">&times;</button>
+            <a href="{{ route('welcome') }}">Home</a>
+            <a href="{{ route('destinations') }}">Destinations</a>
+            <a href="{{ route('contact') }}">Contact Us</a>
+            @auth
+                <a href="{{ route('reservations.index') }}">My Reservations</a>
+                <a href="{{ route('wishlist.index') }}">
+                    <i class="fa fa-heart"></i> Wishlist
+                </a>
+            @endauth
+        </div>
+
         <!-- Main Content -->
         <main>
-            <div class="absolute top-10 left-10 w-20 h-20 bg-[#91766e] rounded-full opacity-20 animate-floating"></div>
-            <div class="absolute bottom-20 right-20 w-32 h-32 bg-[#b7a7a9] rounded-full opacity-10 animate-floating">
-            </div>
             @yield('content')
         </main>
     </div>
 
-    @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const drawer = document.getElementById('drawer');
+            const toggleButton = document.getElementById('drawer-toggle');
+            const closeButton = document.getElementById('close-drawer');
+
+            // Open Drawer
+            toggleButton.addEventListener('click', () => {
+                drawer.style.left = '0';
+            });
+
+            // Close Drawer
+            closeButton.addEventListener('click', () => {
+                drawer.style.left = '-250px';
+            });
+        });
+    </script>
 
 </body>
 

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('destinations', function (Blueprint $table) {
-            $table->json('availability')->nullable(); // JSON column for storing availability dates
-        });
+        if (!Schema::hasColumn('destinations', 'availability')) {
+            Schema::table('destinations', function (Blueprint $table) {
+                $table->json('availability')->nullable();
+            });
+        }
     }
 
     public function down()

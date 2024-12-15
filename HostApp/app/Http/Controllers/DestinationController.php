@@ -16,7 +16,7 @@ class DestinationController extends Controller
             $query->where('name', 'like', "%$search%")
                 ->orWhere('landmark', 'like', "%$search%")
                 ->orWhere('property_type', 'like', "%$search%");
-        })->take(6)->get();
+        })->paginate(6);
 
         
         foreach ($destinations as $destination) {
@@ -40,21 +40,16 @@ class DestinationController extends Controller
 
     public function search(Request $request)
     {
-        // Get the search query
         $query = $request->input('query');
 
-        // Search for destinations by name, property name, or landmark
         $destinations = Destination::where('name', 'LIKE', '%' . $query . '%')
             ->orWhere('landmark', 'LIKE', '%' . $query . '%')
             ->orWhere('property_type', 'LIKE', '%' . $query . '%')
             ->get();
 
-        // Decode the amenities JSON if necessary
         foreach ($destinations as $destination) {
             $destination->amenities = json_decode($destination->amenities, true);
         }
-
-        // Pass the search results to the view
         return view('destinations', compact('destinations'));
     }
 

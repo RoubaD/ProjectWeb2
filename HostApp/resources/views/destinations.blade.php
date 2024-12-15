@@ -27,14 +27,11 @@
         margin-top: 20vh;
         /* Centers the search bar vertically */
         gap: 15px;
-        /* Space between icons and the search bar */
     }
 
     .search-bar-container {
         flex-grow: 1;
-        /* Search bar adapts to available space */
         max-width: 600px;
-        /* Restricts the maximum width for the search bar */
     }
 
     .search-bar {
@@ -202,6 +199,39 @@
     .fa-heart.text-secondary {
         color: #ccc;
     }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination a,
+    .pagination span {
+        display: inline-block;
+        padding: 8px 12px;
+        text-decoration: none;
+        color: #91766e;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .pagination a:hover {
+        background-color: #91766e;
+        color: #ffffff;
+    }
+
+    .pagination .active span {
+        background-color: #91766e;
+        color: #ffffff;
+        border-color: #91766e;
+    }
 </style>
 
 <div class="hero-title">Explore Our Destinations</div>
@@ -214,7 +244,7 @@
     <form method="GET" action="{{ route('destinations') }}" class="search-bar-container">
         <input type="text" name="search" placeholder="Explore destinations..." value="{{ request('search') }}"
             class="search-bar" />
-        <button type="submit" style="display: none;">Search</button> <!-- Hidden button to enable form submission -->
+        <button type="submit" style="display: none;">Search</button> 
     </form>
 
 
@@ -259,6 +289,9 @@
             </div>
         </div>
     @endforeach
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    {{ $destinations->links() }}
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

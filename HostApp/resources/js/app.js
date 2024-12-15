@@ -105,3 +105,19 @@ document.addEventListener("DOMContentLoaded", () => {
         stagger: 0.2,
     });
 });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const drawer = document.getElementById('drawer');
+        const toggleButton = document.getElementById('drawer-toggle');
+        const closeButton = document.getElementById('close-drawer');
+
+        // Open Drawer
+        toggleButton.addEventListener('click', () => {
+            drawer.style.left = '0';
+        });
+
+        // Close Drawer
+        closeButton.addEventListener('click', () => {
+            drawer.style.left = '-250px';
+        });
+    });
