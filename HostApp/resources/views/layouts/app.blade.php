@@ -8,6 +8,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Styles -->
     <style>
@@ -215,6 +216,12 @@
                     <a href="{{ route('welcome') }}">Home</a>
                     <a href="{{ route('destinations') }}">Destinations</a>
                     <a href="{{ route('contact') }}">Contact Us</a>
+        @auth
+                    <a href="{{ route('reservations.index') }}">My Reservations</a>
+                    <a href="{{ route('wishlist.index') }}">
+            <i class="fa fa-heart"></i> Wishlist
+        </a>
+        @endauth
                 </div>
 
                 <!-- Logo in the Center -->
@@ -224,24 +231,25 @@
 
                 <!-- Right Section -->
                 <div class="user-section">
+
                     @auth
-                    <div class="dropdown">
-                        <button class="dropdown-button">
-                            {{ auth()->user()->name ?? auth()->user()->username ?? 'Traveler' }}
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="{{ route('profile.edit') }}">Edit Profile</a>
-                            <form method="POST" action="{{ route('logout') }}" class="logout-form">
-                                @csrf
-                                <button type="submit">Logout</button>
-                            </form>
+                        <div class="dropdown">
+                            <button class="dropdown-button">
+                                {{ auth()->user()->name ?? auth()->user()->username ?? 'Traveler' }}
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="{{ route('profile.edit') }}">Edit Profile</a>
+                                <form method="POST" action="{{ route('logout') }}" class="logout-form">
+                                    @csrf
+                                    <button type="submit">Logout</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
                     @else
-                    <div class="register-login-buttons">
-                        <a href="{{ route('register') }}">Register</a>
-                        <a href="{{ route('login') }}">Login</a>
-                    </div>
+                        <div class="register-login-buttons">
+                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('login') }}">Login</a>
+                        </div>
                     @endauth
                 </div>
             </div>
@@ -249,8 +257,9 @@
 
         <!-- Main Content -->
         <main>
-        <div class="absolute top-10 left-10 w-20 h-20 bg-[#91766e] rounded-full opacity-20 animate-floating"></div>
-        <div class="absolute bottom-20 right-20 w-32 h-32 bg-[#b7a7a9] rounded-full opacity-10 animate-floating"></div>
+            <div class="absolute top-10 left-10 w-20 h-20 bg-[#91766e] rounded-full opacity-20 animate-floating"></div>
+            <div class="absolute bottom-20 right-20 w-32 h-32 bg-[#b7a7a9] rounded-full opacity-10 animate-floating">
+            </div>
             @yield('content')
         </main>
     </div>

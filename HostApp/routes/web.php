@@ -10,6 +10,7 @@ use App\Http\Controllers\PropertyDetailsController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\WishlistController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/wishlist/toggle/{id}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });
 
 //desitnations routes
@@ -74,7 +76,16 @@ Route::get('/destinations/{id}/reserved-dates', [PropertyDetailsController::clas
 Route::get('/api/check-auth', function () {
     return response()->json(['authenticated' => Auth::check()]);
 });
-
+//Reservation routes
+Route::get('/reservations', [ReservationController::class, 'getUserReservations'])->name('reservations.index')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/{destination}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{destination}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::get('/reservations/{reservation}/download-invoice', [ReservationController::class, 'downloadInvoice'])->name('reservations.downloadInvoice');
+    Route::get('/reservations/{reservation}/download-receipt', [ReservationController::class, 'downloadReceipt'])->name('reservations.downloadReceipt');
+    Route::post('/reservation', [ReservationController::class, 'store'])->name('reservations.store');
+});
 
 // Auth routes (registration, login, etc.)
 //require __DIR__.'/auth.php';
