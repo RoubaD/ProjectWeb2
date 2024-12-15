@@ -197,16 +197,38 @@
             if (selectedDates.length === 2) {
                 const [startDate, endDate] = selectedDates;
 
-                // Check if the user is authenticated
                 try {
+                    // Check if the user is authenticated
                     const response = await fetch('/api/check-auth');
                     const data = await response.json();
+                    
 
                     if (data.authenticated) {
-                        // Redirect to reservation page with selected dates
-                        window.location.href = `/reservation?start_date=${startDate}&end_date=${endDate}&destination_id={{ $destination->id }}`;
+                        // Submit the reservation
+                        const reservationResponse = await fetch('/reservation', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            },
+                            body: JSON.stringify({
+                                start_date: startDate,
+                                end_date: endDate,
+                                destination_id: {{ $destination->id }},
+                            }),
+                        });
+
+                        const result = await reservationResponse.json();
+
+                        if (reservationResponse.ok) {
+                            alert("Reservation successful!");
+                            // Optionally, redirect to the reservation details page
+                            window.location.href = '/reservations/' + result.id;
+                        } else {
+                            alert("There was an issue creating your reservation. Please try again.");
+                        }
                     } else {
-                        // Redirect to login page
+                        // Redirect to login page if not authenticated
                         window.location.href = '/login';
                     }
                 } catch (error) {
@@ -217,6 +239,7 @@
                 alert("Please select a start and end date.");
             }
         });
+
 
         function populateYearSelect() {
             yearSelect.innerHTML = "";

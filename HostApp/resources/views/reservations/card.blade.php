@@ -9,8 +9,8 @@
         flex-direction: row;
         border: 1px solid rgba(145, 118, 110, 0.1);
         transform-origin: center;
-        min-height: 500px;
-        max-height: 400px;
+        min-height: 600px;
+        max-height: 500px;
     }
 
 
@@ -143,6 +143,22 @@
         content: '📍';
         font-size: 1rem;
     }
+
+    .download-invoice .btn {
+    background-color: #91766e;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.download-invoice .btn:hover {
+    background-color: #a68471;
+}
+
+
 </style>
 
 <div class="reservation-card">
@@ -175,11 +191,11 @@
                                     @endforeach
                                 @endif
                             </ul>
+                        </div>
             @endif
 
-                <p><strong>Guest Capacity:</strong> {{ $reservation->destinationDetails->guest_capacity ?? 'N/A' }}
-                    guests</p>
-            </div>
+            <p><strong>Guest Capacity:</strong> {{ $reservation->destinationDetails->guest_capacity ?? 'N/A' }} guests
+            </p>
 
             <div class="pricing-location">
                 <p class="price">$ {{ number_format($reservation->destinationDetails->price, 2) }}</p>
@@ -190,6 +206,12 @@
                         View on Google Maps
                     </a>
                 </p>
+            </div>
+            <div class="download-invoice">
+                <a href="{{ route('reservations.downloadInvoice', $reservation->id) }}" class="btn btn-primary">Download
+                    Invoice</a>
+                <a href="{{ route('reservations.downloadReceipt', $reservation->id) }}"
+                    class="btn btn-secondary">Download Receipt</a>
             </div>
         </div>
     </div>

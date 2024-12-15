@@ -82,6 +82,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/{destination}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{destination}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::get('/reservations/{reservation}/download-invoice', [ReservationController::class, 'downloadInvoice'])->name('reservations.downloadInvoice');
+    Route::get('/reservations/{reservation}/download-receipt', [ReservationController::class, 'downloadReceipt'])->name('reservations.downloadReceipt');
+    Route::post('/reservation', [ReservationController::class, 'store'])->name('reservations.store');
 });
 
 // Auth routes (registration, login, etc.)

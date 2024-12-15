@@ -216,10 +216,12 @@
                     <a href="{{ route('welcome') }}">Home</a>
                     <a href="{{ route('destinations') }}">Destinations</a>
                     <a href="{{ route('contact') }}">Contact Us</a>
+        @auth
                     <a href="{{ route('reservations.index') }}">My Reservations</a>
                     <a href="{{ route('wishlist.index') }}">
-                        <i class="fa fa-heart"></i> Wishlist
-                    </a>
+            <i class="fa fa-heart"></i> Wishlist
+        </a>
+        @endauth
                 </div>
 
                 <!-- Logo in the Center -->
