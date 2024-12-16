@@ -4,7 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <title>Nomadia</title>
+    
+    <link rel="icon" href="{{ asset('images/Logo.png') }} " width="64" height="64" type="image/png">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -74,6 +77,7 @@
             /* Adjustable width */
             height: auto;
             /* Maintains aspect ratio */
+            
         }
 
         .user-section {
@@ -258,7 +262,7 @@
 
                 <div class="logo-container">
                     <a href="{{ route('welcome') }}">
-                        <img src="{{ asset('images/Logo.svg') }}" alt="Logo">
+                        <img src="{{ asset('images/Logo.png') }}" alt="Logo">
                     </a>              
                 </div>
                 <div class="user-section">
@@ -290,7 +294,7 @@
             <button id="close-drawer" class="close-drawer">&times;</button>
             <a href="{{ route('welcome') }}">Home</a>
             <a href="{{ route('destinations') }}">Destinations</a>
-            <a href="{{ route('contact') }}">Contact Us</a>
+            <a href="{{ route('contact.show') }}">Contact Us</a>
             @auth
                 <a href="{{ route('reservations.index') }}">My Reservations</a>
                 <a href="{{ route('wishlist.index') }}">

@@ -10,6 +10,8 @@ use App\Http\Controllers\PropertyDetailsController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ContactController;
+use App\Events\MyEvent;
 use App\Http\Controllers\WishlistController;
 
 Route::get('/', function () {
@@ -24,9 +26,12 @@ Route::get('/destinations', function () {
     return view('destinations');
 })->name('destinations');
 
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
+// Route::get('/contact', function () {
+//     return view('contact');
+// })->name('contact');
+
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/register', function () {
     return view('auth.register');
